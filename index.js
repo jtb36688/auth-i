@@ -1,10 +1,13 @@
 const express = require("express");
 const db = require("./data/user-model.js");
 const bcrypt = require('bcryptjs')
+const cors= require('cors')
+
 
 const server = express();
 
 server.use(express.json());
+server.use(cors())
 
 server.post("/api/register", (req, res) => {
   let user = req.body;
@@ -50,6 +53,8 @@ function restricted(req, res, next) {
       });
   }
 }
-  
+// server.use('/api/restricted', restricted, restrictedrouters)
+
+
   const port = process.env.PORT || 5000;
   server.listen(port, () => console.log(`\n** Running on port ${port} **\n`));
