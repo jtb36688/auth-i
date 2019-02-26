@@ -1,4 +1,6 @@
 import React from "react";
+import Axios from "axios";
+axios.defaults.withCredentials = true
 
 const Authentication = PostsPage => Login =>
   class extends React.Component {
@@ -6,6 +8,7 @@ const Authentication = PostsPage => Login =>
       super(props);
       this.state = {
         loggedIn: false,
+        registering: false,
         usernamevalue: "",
         passwordvalue: ""
       };
