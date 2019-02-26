@@ -1,46 +1,27 @@
 import React, { Component } from "react";
+import UsersPage from "./components/UsersPage.js";
+import Authentication from "./components/Authentication/Authentication.js";
 import "./App.css";
-import axios from "axios";
-import Users from "./components/Users"
+import Login from "./components/Login.js";
 
 class App extends Component {
   constructor(props) {
     super(props);
-    this.state = {
-      users: []
-    };
-  }
-  // componentDidMount() {
-  //   axios({
-  //     url: 'http://localhost:5000/api/users',
-  //     method: "GET",
-  //     headers: {
-  //       username: "jacob",
-  //       password: "bryan"
-  //     }
-  //   })
-  // }
-
-  componentDidMount() {
-    axios.get("http://localhost:5000/api/users/", {
-      headers: {
-        username: "jacob",
-        password: "bryan"
-      }
-    })
-    .then(res => {
-      this.setState({ users: res.data })
-    })
-    .catch(err => console.log(err));
+    this.state = {};
   }
 
   render() {
     return (
-      <div className="App">
-        <Users usersarray={this.state.users} />
+      <div>
+        <ConditionalView
+          usernamevalue={this.props.usernamevalue}
+          handleLogOut={this.props.handleLogOut}
+        />
       </div>
     );
   }
 }
+
+const ConditionalView = Authentication(UsersPage)(Login);
 
 export default App;

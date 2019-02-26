@@ -6,8 +6,8 @@ const Authentication = PostsPage => Login =>
       super(props);
       this.state = {
         loggedIn: false,
-        usernamevalue: '',
-        passwordvalue: ''
+        usernamevalue: "",
+        passwordvalue: ""
       };
     }
 
@@ -15,7 +15,8 @@ const Authentication = PostsPage => Login =>
       if (localStorage.getItem("logindata")) {
         this.setState({
           loggedIn: JSON.parse(localStorage.getItem("logindata")).loggedIn,
-          usernamevalue: JSON.parse(localStorage.getItem("logindata")).usernamevalue
+          usernamevalue: JSON.parse(localStorage.getItem("logindata"))
+            .usernamevalue
         });
       }
     }
@@ -26,60 +27,54 @@ const Authentication = PostsPage => Login =>
 
     handleChanges = e => {
       this.setState({ [e.target.name]: e.target.value });
-    }
+    };
 
     submitLogin = e => {
       e.preventDefault();
-      if (
-        (!this.state.usernamevalue) || (!this.state.passwordvalue)
-      ) {
+      if (!this.state.usernamevalue || !this.state.passwordvalue) {
         this.setState({
-          usernamevalue: '',
-          passwordvalue: ''
-        })
-        alert("Invalid login, please enter Username and Password")
-      }
-      else {
+          usernamevalue: "",
+          passwordvalue: ""
+        });
+        alert("Invalid login, please enter Username and Password");
+      } else {
         this.setState({
-          loggedIn: true,
-        })
+          loggedIn: true
+        });
       }
-    }
+    };
 
     handleLogOut = () => {
       this.setState({
         loggedIn: false,
-        usernamevalue: '',
-        passwordvalue: ''
-      })
-    }
-
+        usernamevalue: "",
+        passwordvalue: ""
+      });
+    };
 
     conditionalRender = () => {
       if (this.state.loggedIn) {
-        return <App 
-        usernamevalue={this.state.usernamevalue}
-        handleLogOut={this.handleLogOut}/>
+        return (
+          <App
+            usernamevalue={this.state.usernamevalue}
+            handleLogOut={this.handleLogOut}
+          />
+        );
       } else {
-        return <Login 
-        passwordvalue={this.state.passwordvalue}
-        usernamevalue={this.state.usernamevalue}
-        handleChanges={this.handleChanges}
-        submitLogin={this.submitLogin} />
+        return (
+          <Login
+            passwordvalue={this.state.passwordvalue}
+            usernamevalue={this.state.usernamevalue}
+            handleChanges={this.handleChanges}
+            submitLogin={this.submitLogin}
+          />
+        );
       }
     };
 
-
-
     render() {
-      return (
-        this.conditionalRender()
-      )
+      return this.conditionalRender();
     }
-
-
   };
-
-// Authentication does not receive any props because it is the highest level component
 
 export default Authentication;
