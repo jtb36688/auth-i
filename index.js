@@ -84,11 +84,15 @@ server.get("/api/users", restricted, (req, res) => {
     });
 });
 
-server.get("/api/logout", (req, res) => {
+server.get('/api/logout', (req, res) => {
   if (req.session) {
     req.session.destroy(err => {
       if (err) {
+        res.send(
+          'you can checkout any time you like, but you can never leave....'
+        );
       } else {
+        res.send('bye, thanks for playing');
       }
     });
   } else {
