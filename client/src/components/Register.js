@@ -1,6 +1,6 @@
 import React from "react";
-import { Button } from "reactstrap";
 import axios from "axios";
+axios.defaults.withCredentials = true;
 
 class Register extends React.Component {
   constructor(props) {
@@ -27,9 +27,10 @@ class Register extends React.Component {
       }
     })
     .then(res => {
-      this.setState({ users: res.data });
-    })
+     console.log(res)
+    }, this.props.toggleRegister())
     .catch(err => console.log(err));
+    
   };
 
   render() {
@@ -47,12 +48,12 @@ class Register extends React.Component {
             placeholder="password"
             onChange={this.handleChanges}
           />
-          <Button type="submit">Register User</Button>
+          <button type="submit">Register User</button>
         </form>
-        <Button type="button" onClick={this.props.toggleRegister}>
+        <button type="submit" onClick={this.props.toggleRegister}>
           {" "}
           Back to Login{" "}
-        </Button>
+        </button>
       </div>
     );
   }

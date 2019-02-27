@@ -1,8 +1,10 @@
 import React from "react";
-import Axios from "axios";
-axios.defaults.withCredentials = true
+import UsersPage from "./components/UsersPage.js"
+import Register from "./components/Register";
+import axios from "axios";
+axios.defaults.withCredentials = true;
 
-const Authentication = PostsPage => Login =>
+const Authentication = UsersPage => Login =>
   class extends React.Component {
     constructor(props) {
       super(props);
@@ -14,19 +16,19 @@ const Authentication = PostsPage => Login =>
       };
     }
 
-    componentDidMount() {
-      if (localStorage.getItem("logindata")) {
-        this.setState({
-          loggedIn: JSON.parse(localStorage.getItem("logindata")).loggedIn,
-          usernamevalue: JSON.parse(localStorage.getItem("logindata"))
-            .usernamevalue
-        });
-      }
-    }
+    // componentDidMount() {
+    //   if (localStorage.getItem("logindata")) {
+    //     this.setState({
+    //       loggedIn: JSON.parse(localStorage.getItem("logindata")).loggedIn,
+    //       usernamevalue: JSON.parse(localStorage.getItem("logindata"))
+    //         .usernamevalue
+    //     });
+    //   }
+    // }
 
-    componentDidUpdate() {
-      localStorage.setItem("logindata", JSON.stringify(this.state));
-    }
+    // componentDidUpdate() {
+    //   localStorage.setItem("logindata", JSON.stringify(this.state));
+    // }
 
     handleChanges = e => {
       this.setState({ [e.target.name]: e.target.value });
@@ -34,17 +36,21 @@ const Authentication = PostsPage => Login =>
 
     submitLogin = e => {
       e.preventDefault();
-      if (!this.state.usernamevalue || !this.state.passwordvalue) {
-        this.setState({
-          usernamevalue: "",
-          passwordvalue: ""
-        });
-        alert("Invalid login, please enter Username and Password");
-      } else {
-        this.setState({
-          loggedIn: true
-        });
-      }
+      axios
+        .post("http://localhost:5000/api/login/", {
+          "username": `${this.state.usernamevalue}`,
+          "password": `${this.state.passwordvalue}`
+        })
+        .then(res => {
+          this.setState({ loggedIn: true });
+        })
+        .catch(err => alert(err));
+    };
+
+    toggleRegister = () => {
+      this.setState(currentState => ({
+        registering: !currentState.registering
+      }));
     };
 
     handleLogOut = () => {
@@ -58,20 +64,25 @@ const Authentication = PostsPage => Login =>
     conditionalRender = () => {
       if (this.state.loggedIn) {
         return (
-          <App
+          <UsersPage
             usernamevalue={this.state.usernamevalue}
             handleLogOut={this.handleLogOut}
           />
         );
       } else {
-        return (
-          <Login
-            passwordvalue={this.state.passwordvalue}
-            usernamevalue={this.state.usernamevalue}
-            handleChanges={this.handleChanges}
-            submitLogin={this.submitLogin}
-          />
-        );
+        if (this.state.registering) {
+          return (<Register toggleRegister={this.toggleRegister} />);
+        } else {
+          return (
+            <Login
+              passwordvalue={this.state.passwordvalue}
+              usernamevalue={this.state.usernamevalue}
+              handleChanges={this.handleChanges}
+              submitLogin={this.submitLogin}
+              toggleRegister={this.toggleRegister}
+            />
+          );
+        }
       }
     };
 

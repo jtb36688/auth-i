@@ -28,11 +28,15 @@ const sessionConfig = {
 
   })
 };
+const corsOptions = {
+  credentials: true
+}
 
 server.use(express.json());
 server.use(cors());
 // server.use("/api/restricted", restricted, closedroutes)
 server.use(session(sessionConfig));
+server.use("/api/", cors(corsOptions))
 server.use("/api/restricted", restricted);
 
 server.post("/api/register", (req, res) => {

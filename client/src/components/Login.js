@@ -124,18 +124,18 @@ class Login extends React.Component {
                 <UsernameDiv>
                   <div>Username:</div>
                   <UsernameInput
-                    value={this.props.username}
+                    value={this.props.usernamevalue}
                     type="text"
-                    name="username"
+                    name="usernamevalue"
                     onChange={this.props.handleChanges}
                   />
                 </UsernameDiv>
                 <PasswordDiv>
                   <div>Password:</div>
                   <PasswordInput
-                    value={this.props.password}
+                    value={this.props.passwordvalue}
                     type="password"
-                    name="password"
+                    name="passwordvalue"
                     onChange={this.props.handleChanges}
                   />
                 </PasswordDiv>
@@ -143,7 +143,7 @@ class Login extends React.Component {
             </InputsButtonsDiv>
             <LogRegButtons>
             <LoginButton type="submit">Login</LoginButton>
-            <RegisterButton type="submit" onClick={this.props.toggleRegister}> Register</RegisterButton>
+            <RegisterButton type="button" onClick={this.props.toggleRegister}> Register</RegisterButton>
             </LogRegButtons>
           </LoginForm>
         </LoginDialog>
