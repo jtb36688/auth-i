@@ -10,7 +10,7 @@ dbConfig = require("./data/dbConfig.js")
 
 const server = express();
 const sessionConfig = {
-  name: "rockruff",
+  name: "doggo",
   secret: "woofbarkwoof",
   cookie: {
     maxAge: 1000 * 60 * 15, //value in milliseconds, 15 minutes
@@ -28,6 +28,7 @@ const sessionConfig = {
 
   })
 };
+
 const corsOptions = {
   credentials: true
 }
@@ -36,7 +37,7 @@ server.use(express.json());
 server.use(cors());
 // server.use("/api/restricted", restricted, closedroutes)
 server.use(session(sessionConfig));
-server.use("/api/", cors(corsOptions))
+server.use("/api", cors(corsOptions))
 server.use("/api/restricted", restricted);
 
 server.post("/api/register", (req, res) => {
