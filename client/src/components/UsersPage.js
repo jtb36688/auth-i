@@ -9,24 +9,10 @@ class UsersPage extends Component {
       users: []
     };
   }
-  // componentDidMount() {
-  //   axios({
-  //     url: 'http://localhost:5000/api/users',
-  //     method: "GET",
-  //     headers: {
-  //       username: "jacob",
-  //       password: "bryan"
-  //     }
-  //   })
-  // }
 
   componentDidMount() {
     axios
       .get("http://localhost:5000/api/users/", {
-        headers: {
-          username: "jacob",
-          password: "bryan"
-        }
       })
       .then(res => {
         this.setState({ users: res.data });
@@ -38,9 +24,17 @@ class UsersPage extends Component {
     return (
       <div className="App">
         <Users usersarray={this.state.users} />
+         <button style={buttonstyles} onClick={this.props.handleLogout}>Log Out</button>
       </div>
     );
   }
+}
+
+const buttonstyles = {
+  width: '30%',
+  backgroundColor: "orange",
+  color: "black",
+  textAlign: "center"
 }
 
 export default UsersPage;

@@ -20,17 +20,14 @@ class Register extends React.Component {
   handleRegister = e => {
     e.preventDefault();
     axios
-    .post("http://localhost:5000/api/register/", {
-      headers: {
+      .post("http://localhost:5000/api/register/", {
         username: `${this.state.username}`,
         password: `${this.state.password}`
-      }
-    })
-    .then(res => {
-     console.log(res)
-    }, this.props.toggleRegister())
-    .catch(err => console.log(err));
-    
+      })
+      .then(() => {
+        this.props.toggleRegister();
+      })
+      .catch(err => console.log(err));
   };
 
   render() {

@@ -1,10 +1,8 @@
 import React from "react";
-import UsersPage from "./components/UsersPage.js"
-import Register from "./components/Register";
 import axios from "axios";
 axios.defaults.withCredentials = true;
 
-const Authentication = UsersPage => Login =>
+const Authentication = UsersPage => Login => Register =>
   class extends React.Component {
     constructor(props) {
       super(props);
@@ -16,19 +14,16 @@ const Authentication = UsersPage => Login =>
       };
     }
 
-    // componentDidMount() {
-    //   if (localStorage.getItem("logindata")) {
-    //     this.setState({
-    //       loggedIn: JSON.parse(localStorage.getItem("logindata")).loggedIn,
-    //       usernamevalue: JSON.parse(localStorage.getItem("logindata"))
-    //         .usernamevalue
-    //     });
-    //   }
-    // }
-
-    // componentDidUpdate() {
-    //   localStorage.setItem("logindata", JSON.stringify(this.state));
-    // }
+    componentDidMount() {
+      axios
+      .get("http://localhost:5000/api/checkauth")
+      .then(res => {
+        console.log(res)
+        if (res.data) {
+          this.setState({ loggedIn: true })
+        }
+      })
+    }
 
     handleChanges = e => {
       this.setState({ [e.target.name]: e.target.value });
@@ -37,9 +32,9 @@ const Authentication = UsersPage => Login =>
     submitLogin = e => {
       e.preventDefault();
       axios
-        .post("http://localhost:5000/api/login/", {
-          "username": `${this.state.usernamevalue}`,
-          "password": `${this.state.passwordvalue}`
+        .post("http://localhost:5000/api/login", {
+          username: `${this.state.usernamevalue}`,
+          password: `${this.state.passwordvalue}`
         })
         .then(res => {
           this.setState({ loggedIn: true });
@@ -53,12 +48,12 @@ const Authentication = UsersPage => Login =>
       }));
     };
 
-    handleLogOut = () => {
-      this.setState({
-        loggedIn: false,
-        usernamevalue: "",
-        passwordvalue: ""
-      });
+    handleLogout = () => {
+      axios.get("http://localhost:5000/api/logout")
+      .then(() => {
+        this.setState({ loggedIn: false })
+      })
+      .catch(err => alert(err))
     };
 
     conditionalRender = () => {
@@ -66,12 +61,12 @@ const Authentication = UsersPage => Login =>
         return (
           <UsersPage
             usernamevalue={this.state.usernamevalue}
-            handleLogOut={this.handleLogOut}
+            handleLogout={this.handleLogout}
           />
         );
       } else {
         if (this.state.registering) {
-          return (<Register toggleRegister={this.toggleRegister} />);
+          return <Register toggleRegister={this.toggleRegister} />;
         } else {
           return (
             <Login

@@ -3,6 +3,7 @@ import UsersPage from "./components/UsersPage.js";
 import Authentication from "./Authentication.js";
 import "./App.css";
 import Login from "./components/Login.js";
+import Register from "./components/Register.js"
 
 class App extends Component {
   constructor(props) {
@@ -22,6 +23,6 @@ class App extends Component {
   }
 }
 
-const ConditionalView = Authentication(UsersPage)(Login);
+const ConditionalView = Authentication(UsersPage)(Login)(Register);
 
 export default App;

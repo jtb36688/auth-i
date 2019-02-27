@@ -6,7 +6,7 @@ const session = require("express-session");
 const KnexSessionStore = require('connect-session-knex')(session)
 
 const db = require("./data/user-model.js");
-dbConfig = require("./data/dbConfig.js")
+const dbConfig = require("./data/dbConfig.js")
 
 const server = express();
 const sessionConfig = {
@@ -25,20 +25,16 @@ const sessionConfig = {
     sidfieldname: 'sid',
     createtable: true,
     clearInterval: 1000 * 60 * 60, // value in milliseconds, 60 minutes
-
   })
 };
 
-const corsOptions = {
-  credentials: true
-}
+
 
 server.use(express.json());
-server.use(cors());
 // server.use("/api/restricted", restricted, closedroutes)
-server.use(session(sessionConfig));
-server.use("/api", cors(corsOptions))
+server.use(cors({ credentials: true, origin: true }));
 server.use("/api/restricted", restricted);
+server.use(session(sessionConfig));
 
 server.post("/api/register", (req, res) => {
   let user = req.body;
@@ -54,9 +50,17 @@ server.post("/api/register", (req, res) => {
     });
 });
 
+server.get("/api/checkauth", (req, res) => {
+  if (req.session && req.session.user) {
+    res.send(true)
+  }
+  else {
+    res.send(false)
+  }
+})
+
 server.post("/api/login", (req, res) => {
   const { username, password } = req.body;
-
   if (username && password) {
     db.findBy({ username })
       .first()
@@ -73,8 +77,8 @@ server.post("/api/login", (req, res) => {
           res.status(401).json({ message: "Login Error" });
         }
       })
-      .catch(error => {
-        res.status(500).json(error);
+      .catch(({ code, message }) => {
+        console.log(code, message)
       });
   }
 });
@@ -90,7 +94,7 @@ server.get("/api/users", restricted, (req, res) => {
 });
 
 server.get('/api/logout', (req, res) => {
-  if (req.session) {
+  if (req.session && req.session.user) {
     req.session.destroy(err => {
       if (err) {
         res.send(
